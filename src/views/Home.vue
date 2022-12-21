@@ -38,6 +38,8 @@ import { ref, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { getMenu } from '@/api/home'
 import { ElMessage } from 'element-plus'
+import { useStore } from 'vuex'
+import store from '@/store'
 
 export default defineComponent({
   name: 'Home',
@@ -75,10 +77,14 @@ export default defineComponent({
       router.push('/login')
     }
     const getMenuList = async () => {
-      const { data } = await getMenu({})
-      if (data.meta.status === 200) {
-        menuList.value = data.data
-      }
+      // const { data } = await getMenu({})
+      // if (data.meta.status === 200) {
+      //   menuList.value = data.data
+      // }
+
+      //调用store的action方法要用dispatch
+      const MenuList = await store.dispatch('getRolesMenus')
+      menuList.value = MenuList
     }
     const toggleCollapse = () => {
       isCollapse.value = !isCollapse.value
